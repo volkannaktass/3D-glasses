@@ -22,7 +22,7 @@ pinMode(trigPinRight, OUTPUT); // Sets the trigPin as an Output
 pinMode(echoPinRight, INPUT); // Sets the echoPin as an Input
 pinMode(buzzerRight, OUTPUT);
 pinMode(ledPin, OUTPUT);
-pinMode(trigPinLeft   , OUTPUT);
+pinMode(trigPinLeft, OUTPUT);
 pinMode(echoPinLeft, INPUT); // Sets the echoPin as an Input
 pinMode(buzzerLeft, OUTPUT);
 Serial.begin(9600); // Starts the serial communication
@@ -34,59 +34,64 @@ void loop() {
   // Clears the trigPin
 digitalWrite(trigPinRight, LOW);
 delayMicroseconds(2);
-digitalWrite(trigPinLeft, LOW);
-delayMicroseconds(2);
+
 // Sets the trigPin on HIGH state for 10 micro seconds
 digitalWrite(trigPinRight, HIGH);
 delayMicroseconds(10);
 digitalWrite(trigPinRight, LOW);
+
+
+
+// Reads the echoPin, returns the sound wave travel time in microseconds
+durationRight = pulseIn(echoPinRight, HIGH);
+//
+// Calculating the distance
+distanceRight= durationRight*0.034/2;
+//
+ 
+safetyDistanceRight = distanceRight;
+
+
+Serial.println("DISTANCE RIGHT");
+Serial.println(distanceRight);
+ if(safetyDistanceRight <= 100){
+   digitalWrite(buzzerRight, HIGH);
+   
+ }
+ else{
+   digitalWrite(buzzerRight, LOW);
+   
+ }
+
+
+
+ 
+durationRight = pulseIn(echoPinRight, LOW);
+pulseIn(echoPinRight, LOW);
+
+digitalWrite(trigPinLeft, LOW);
+delayMicroseconds(2);
+
 digitalWrite(trigPinLeft, HIGH);
 delayMicroseconds(10);
 digitalWrite(trigPinLeft, LOW);
-// Reads the echoPin, returns the sound wave travel time in microseconds
-durationRight = pulseIn(echoPinRight, HIGH);
+ 
 durationLeft = pulseIn(echoPinLeft, HIGH);
-// Calculating the distance
-distanceRight= durationRight*0.034/2;
 distanceLeft= durationLeft * 0.034/2;
- 
-safetyDistanceRight = distanceRight;
 safetyDistanceLeft = distanceLeft;
- 
-if (safetyDistanceRight <= 100 && safetyDistanceLeft <= 100){
-  digitalWrite(buzzerRight, HIGH);
-  digitalWrite(buzzerLeft, HIGH);
-  Serial.print("distanceRight: ");
-  Serial.println(distanceRight);
-  Serial.print("distanceLeft: ");
-  Serial.println(distanceLeft);
-  //digitalWrite(ledPin, HIGH);
-}
-else if(safetyDistanceRight <= 100 && safetyDistanceLeft > 100){
-  digitalWrite(buzzerRight, HIGH);
-  digitalWrite(buzzerLeft, LOW);
-  Serial.print("distanceRight: ");
-  Serial.println(distanceRight);
-  Serial.print("distanceLeft: ");
-  Serial.println(distanceLeft);
- }
-else if(safetyDistanceRight > 100 && safetyDistanceLeft <= 100){
-  digitalWrite(buzzerRight, LOW);
-  digitalWrite(buzzerLeft, HIGH);
-  Serial.print("distanceRight: ");
-  Serial.println(distanceRight);
-  Serial.print("distanceLeft: ");
-  Serial.println(distanceLeft);
- }
-else{
-  digitalWrite(buzzerRight, LOW);
-  digitalWrite(buzzerLeft, LOW);
-  Serial.print("distanceRight: ");
-  Serial.println(distanceRight);
-  Serial.print("distanceLeft: ");
-  Serial.println(distanceLeft);
-}
+Serial.println("Distance LEFT");
+Serial.println(distanceLeft);
+ if(safetyDistanceLeft <= 100){
+   digitalWrite(buzzerLeft, HIGH);
 
+   
+ }
+ else{
+   digitalWrite(buzzerLeft, LOW);
+
+ }
+durationLeft = pulseIn(echoPinLeft, LOW);
+pulseIn(echoPinLeft, LOW);
 // Prints the distance on the Serial Monitor
 //Serial.print("Distance: ");
 //Serial.println(distance);
